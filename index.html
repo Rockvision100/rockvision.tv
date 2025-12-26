@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Rockvision</title>
+<style>
+body { font-family: Arial; background:#111; color:#fff; }
+nav a { margin:10px; color:#0ff; cursor:pointer; }
+.hidden { display:none; }
+table { width:60%; margin-top:20px; }
+td,th { border:1px solid #555; padding:8px; text-align:center; }
+</style>
+</head>
+<body>
+
+<h1>🎸 Rockvision</h1>
+
+<nav>
+<a onclick="show('live')">Na żywo</a>
+<a onclick="show('winner')">Ostatnia piosenka</a>
+<a onclick="show('info')">Informacje</a>
+<a onclick="showAdmin()">Admin</a>
+</nav>
+
+<div id="live">
+<h2>Wyniki na żywo</h2>
+<table id="table">
+<tr><th>Kraj</th><th>Punkty</th></tr>
+</table>
+</div>
+
+<div id="admin" class="hidden">
+<h2>Panel admina</h2>
+<input id="country" placeholder="Nazwa kraju">
+<input id="points" type="number" placeholder="Punkty">
+<button onclick="addPoints()">Dodaj</button>
+</div>
+
+<div id="winner" class="hidden">
+<h2>🏆 Ostatnia wygrana piosenka</h2>
+<p id="winnerText">Brak danych</p>
+</div>
+
+<div id="info" class="hidden">
+<h2>Informacje o wydarzeniach</h2>
+<p>Rockvision – konkurs muzyczny</p>
+</div>
+
+<script>
+let data = {};
+
+function show(id){
+document.querySelectorAll('div').forEach(d=>d.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+}
+
+function showAdmin(){
+let pass = prompt("Hasło admina:");
+if(pass==="rock123") show('admin');
+else alert("Złe hasło");
+}
+
+function addPoints(){
+let c = country.value;
+let p = parseInt(points.value);
+data[c] = (data[c]||0) + p;
+render();
+}
+
+function render(){
+let t = document.getElementById("table");
+t.innerHTML="<tr><th>Kraj</th><th>Punkty</th></tr>";
+Object.entries(data)
+.sort((a,b)=>b[1]-a[1])
+.forEach(e=>{
+t.innerHTML+=`<tr><td>${e[0]}</td><td>${e[1]}</td></tr>`;
+});
+}
+</script>
+
+</body>
+</html>
